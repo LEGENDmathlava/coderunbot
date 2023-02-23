@@ -4,11 +4,14 @@ import re
 
 import discord
 
+from .languages import load_languages
+
 here = os.path.dirname(__file__)
 
 
 async def main(message: discord.Message, arg: str):
 
+    await load_languages()
     with open(f'{here}/languages.json', 'r') as f:
         language_dict = json.load(f)
     arg = re.sub(r'```[A-z\-\+]*\n', '', arg).replace('```', '')
@@ -16,7 +19,7 @@ async def main(message: discord.Message, arg: str):
     code = arg.replace(language, '', 1).lstrip(' \n')
     language = language.lower() \
         .replace('pp', '++').replace('sharp', '#') \
-        .replace('clisp', 'lisp').replace('lisp', 'clisp')
+        .replace('clisp', 'lisp').replace('bash', 'bashscript')
     if language not in language_dict.keys():
         embed = discord.Embed(
             title='The following languages are supported',

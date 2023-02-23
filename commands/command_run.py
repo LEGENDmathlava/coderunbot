@@ -6,12 +6,15 @@ import io
 import aiohttp
 import discord
 
+from .languages import load_languages
+
 url = 'https://wandbox.org/api/compile.json'
 here = os.path.dirname(__file__)
 
 
 async def main(message: discord.Message, arg: str):
-
+    
+    await load_languages()
     with open(f'{here}/languages.json', 'r') as f:
         language_dict = json.load(f)
     arg = re.sub(r'```[A-z\-\+]*\n', '', arg).replace('```', '')
@@ -20,7 +23,7 @@ async def main(message: discord.Message, arg: str):
     stdin = ''
     language = language.lower() \
         .replace('pp', '++').replace('sharp', '#') \
-        .replace('clisp', 'lisp').replace('lisp', 'clisp')
+        .replace('clisp', 'lisp').replace('bash', 'bashscript')
     if language == 'saved':
         if not os.path.exists(f'{here}/saved_codes/{message.author.id}.json'):
             embed = discord.Embed(
